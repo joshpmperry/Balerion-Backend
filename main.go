@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/shopspring/decimal"
 )
@@ -107,65 +110,65 @@ func DecimalToThaiBaht(value decimal.Decimal) (string, error) {
 	return result, nil
 }
 
-func main() {
-	inputs := []decimal.Decimal{
-		decimal.NewFromFloat(999999999.99), // Change this number to whatever you'd like
-	}
+// func main() {
+// 	inputs := []decimal.Decimal{
+// 		decimal.NewFromFloat(999999999.99), // Change this number to whatever you'd like
+// 	}
 
-	for _, input := range inputs {
-		result, err := DecimalToThaiBaht(input)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			continue
-		}
-		fmt.Printf("%v: %s\n", input, result)
-	}
-}
+// 	for _, input := range inputs {
+// 		result, err := DecimalToThaiBaht(input)
+// 		if err != nil {
+// 			fmt.Printf("Error: %v\n", err)
+// 			continue
+// 		}
+// 		fmt.Printf("%v: %s\n", input, result)
+// 	}
+// }
 
 // Used for input files when passing through executable
-// func processInputFile(filename string) error {
-// 	file, err := os.Open(filename)
-// 	if err != nil {
-// 		return fmt.Errorf("error opening file: %w", err)
-// 	}
-// 	defer file.Close()
+func processInputFile(filename string) error {
+	file, err := os.Open(filename)
+	if err != nil {
+		return fmt.Errorf("error opening file: %w", err)
+	}
+	defer file.Close()
 
-// 	scanner := bufio.NewScanner(file)
-// 	for scanner.Scan() {
-// 		line := scanner.Text()
-// 		line = strings.TrimSpace(line)
-// 		if line == "" {
-// 			continue
-// 		}
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
 
-// 		num, err := decimal.NewFromString(line)
-// 		if err != nil {
-// 			fmt.Printf("Error converting '%s': %v\n", line, err)
-// 			continue
-// 		}
+		num, err := decimal.NewFromString(line)
+		if err != nil {
+			fmt.Printf("Error converting '%s': %v\n", line, err)
+			continue
+		}
 
-// 		thaiText := DecimalToThaiBaht(num)
-// 		fmt.Println(thaiText)
-// 	}
+		thaiText, err := DecimalToThaiBaht(num)
+		fmt.Println(thaiText)
+	}
 
-// 	if err := scanner.Err(); err != nil {
-// 		return fmt.Errorf("error reading file: %w", err)
-// 	}
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("error reading file: %w", err)
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
-// func main() {
-// 	// Input file number.txt -> change the numbers to your liking :)
-// 	if len(os.Args) > 1 {
-// 		filename := os.Args[1]
-// 		err := processInputFile(filename)
-// 		if err != nil {
-// 			fmt.Println("Error:", err)
-// 			os.Exit(1)
-// 		}
-// 	} else {
-// 		fmt.Println("Usage: go run main.go <input_file>")
-// 		os.Exit(1)
-// 	}
-// }
+func main() {
+	// Input file number.txt -> change the numbers to your liking :)
+	if len(os.Args) > 1 {
+		filename := os.Args[1]
+		err := processInputFile(filename)
+		if err != nil {
+			fmt.Println("Error:", err)
+			os.Exit(1)
+		}
+	} else {
+		fmt.Println("Usage: go run main.go <input_file>")
+		os.Exit(1)
+	}
+}
